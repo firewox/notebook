@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改昵称</title>
+    <link href="css/zui.min.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/zui.min.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <style type="text/css">
+        #head{
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="div_login">
+
+    <h3 id="head">修改昵称</h3>
+    <form @submit.prevent="fun1">
+        <div class="form-group">
+            <label for="email">邮&nbsp&nbsp&nbsp箱：</label>
+            <input v-model="user.email" type="email" class="form-control" id="email" name="email" placeholder="请输入邮箱" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">密&nbsp&nbsp&nbsp码：</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" v-model="user.password">
+        </div>
+
+        <div class="form-group">
+            <label for="username">新昵称</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入新昵称" v-model="user.username">
+        </div>
+
+        <div class="form-group" style="text-align: center">
+            <input class="btn btn-primary" type="submit" value="修改" />
+            <input @click="fun2" class="btn btn-default" type="button" value="退出" />
+        </div>
+    </form>
+
+    <!-- 对话框HTML -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{msg}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" v-show="!resultInfo.flag" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    var loginVue = new Vue({
+        el:"#div_login",
+        data:{
+            user:{
+                email:"",
+                password:"",
+                username:""
+            },
+            resultInfo:{
+                flag:false,
+                errorMsg:""
+            },
+            msg:"",
+        },
+        watch: {
+            resultInfo: {
+                handler(newResultInfo, oldResultInfo) {
+                    this.msg = newResultInfo.errorMsg;
+                },
+                deep: true
+            }
+        },
+        methods:{
+            fun1:function () {
+                var _this = this;
+                axios.post('/modify/modifyUsername.do',
+                    {
+                        email:_this.user.email,
+                        password:_this.user.password,
+                        username:_this.user.username
+                    })
+                    .then(function (response) {
+                        _this.resultInfo.flag=response.data.flag;
+                        _this.resultInfo.errorMsg=response.data.errorMsg;
+                        if(_this.resultInfo.flag){
+                            location.href="index.html";
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                $('#myModal').modal({
+                    keyboard : false,
+                    show     : true
+                });
+            },
+            fun2:function () {
+                window.close();
+            },
+            toggle:function () {
+                $('#myModal').modal("hide");
+            },
+            fun4:function () {
+            }
+        }
+    });
+
+</script>
+</html>

@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>notebook</title>
+
+    <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./plugins/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="./plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="./plugins/morris/morris.css">
+    <link rel="stylesheet" href="./plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="stylesheet" href="./plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="./plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="./plugins/treeTable/jquery.treetable.css">
+    <link rel="stylesheet" href="./plugins/treeTable/jquery.treetable.theme.default.css">
+    <link rel="stylesheet" href="./plugins/select2/select2.css">
+    <link rel="stylesheet" href="./plugins/colorpicker/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="./plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="./plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./plugins/ionslider/ion.rangeSlider.css">
+    <link rel="stylesheet" href="./plugins/ionslider/ion.rangeSlider.skinNice.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-slider/slider.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
+
+    <link href="css/zui.min.css" rel="stylesheet">
+
+    <script src="./js/vuejs-2.5.16.js"></script>
+    <script src="./js/vue-router/dist/vue-router.min.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="./user/content.js"></script>
+    <script src="./user/imageBG.js"></script>
+    <script src="./user/ebbinghaus.js"></script>
+
+</head>
+<body onload="fun0()">
+<div class="container-fluid" id="div_container">
+    <!-- 页面头部 -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a class="logo" href="index.html">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>NOTE</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>NOTE</b>book</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img v-show="show" src="./img/avatar1.png" class="user-image" alt="User Image">
+                            <img v-show="!show" src="./img/avatar0.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs" >{{user.username}}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img v-show="show" src="./img/avatar1.png" class="img-circle" alt="User Image">
+                                <img v-show="!show" src="./img/avatar0.png" class="img-circle" alt="User Image">
+
+                                <p style="color: #000000">
+                                    {{user.username}}
+                                </p>
+                            </li>
+                            <!--Menu Body-->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#"></a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <!--加入时间-->
+                                        <p class="text-center">{{user.created}}加入</p>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#"></a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a @click="fun1" href="#" class="btn btn-mini btn-flat">修改昵称</a>
+                                    <a @click="fun2" href="#" class="btn btn-mini btn-flat">修改密码</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a @click="fun3" href="#" class="btn btn-mini btn-flat">注销</a>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- 页面头部 /-->
+
+    <!-- 导航侧栏 -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <!-- 我的笔记本 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-folder"></i> <span>我的笔记本</span>
+                        <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="add-category">
+                            <a @click="fun5" class="btn btn-default btn-flat">
+                                <i class="fa fa-circle-o"></i> 新建笔记本
+                            </a>
+                        </li>
+                        <!--<li id="default-notebook" track-by="$index" v-for="(cg,index) in categories" >-->
+                        <li id="default-notebook" v-for="(cg,index) in categories" v-bind:key="cg.cid">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i> <span @click="fun_reload"><router-link :to="{path:'/content',query:{cid:cg.cid}}">{{cg.categoryName}}</router-link></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!--艾宾浩斯记忆标签-->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-pie-chart"></i> <span>艾宾浩斯记忆标签</span>
+                        <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="add-label">
+                            <a @click="fun10" class="btn btn-default btn-flat">
+                                <i class="fa fa-circle-o"></i> 新建标签
+                            </a>
+                        </li>
+                        <li id="default-label" v-for="(label,index) in labels" v-bind:key="label.lid">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i> <span @click="fun10_1(index)">{{label.labelName}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--艾宾浩斯记忆-->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-pie-chart"></i> <span>艾宾浩斯记忆</span>
+                        <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="default-labelNotebook" v-for="(lb,index) in labels" v-bind:key="lb.lid">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i> <span @click="fun_reload"><router-link :to="{path:'/ebbinghaus',query:{lid:lb.lid,uid:user.userId}}">{{lb.labelName}}</router-link></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--垃圾中转中心-->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-pie-chart"></i> <span>垃圾中转中心</span>
+                        <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="default-trashStation" v-for="(ts,index) in trashStation" v-bind:key="ts.tsid">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i> <span @click="fun11(index)">{{ts.notebookName}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- 退出登录 /-->
+                <li id="admin-documentation">
+                    <a @click="fun4" href="#">
+                        <i class="fa fa-book"></i>
+                        <span>退出登录</span>
+                    </a>
+                </li>
+
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- 导航侧栏 /-->
+
+    <!-- 内容区域 -->
+    <!--vue-router的锚点-->
+    <router-view></router-view>
+    <!-- 内容区域 /-->
+
+    <!-- 底部导航 -->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 3.0.1
+        </div>
+        <strong>Copyright &copy; 2021-2022 <a href="#">noteBOOK</a>.</strong> All rights reserved.
+    </footer>
+    <!-- 底部导航 /-->
+
+    <!-- 对话框HTML -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{msg}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" v-show="resultInfo.flag" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建笔记本对话框-->
+    <div class="modal fade" id="myModal_1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建笔记本</h4>
+                </div>
+                <div class="modal-body">
+                    <form @submit.prevent="fun6">
+                        <div class="form-group">
+                            <label for="newCategoryName">名称：</label>
+                            <input v-model="newCategoryName" type="text" class="form-control" id="newCategoryName" name="newCategoryName" placeholder="请输入新笔记本名称" required>
+                        </div>
+                        <div class="form-group" style="text-align: center">
+                            <input class="btn btn-primary" type="submit"  value="保存" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新建笔记对话框-->
+    <div class="modal fade" id="myModal_2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建笔记</h4>
+                </div>
+                <div class="modal-body">
+                    <form @submit.prevent="fun8">
+                        <div class="form-group">
+                            <label for="newNotebookName">名称：</label>
+                            <input v-model="newNotebookName" type="text" class="form-control" id="newNotebookName" name="newNotebookName" placeholder="请输入新笔记名称" required>
+                        </div>
+                        <div class="form-group" style="text-align: center">
+                            <input class="btn btn-primary" type="submit"  value="保存" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新建标签对话框-->
+    <div class="modal fade" id="myModal_3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建标签</h4>
+                </div>
+                <div class="modal-body">
+                    <form @submit.prevent="fun10_2">
+                        <div class="form-group">
+                            <label for="newLabelName">名称：</label>
+                            <input v-model="newLabelName" type="text" class="form-control" id="newLabelName" name="newLabelName" placeholder="请输入新标签名称" required>
+                        </div>
+                        <div class="form-group" style="text-align: center">
+                            <input class="btn btn-primary" type="submit"  value="保存" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 标签编辑对话框-->
+    <div class="modal fade" id="myModal_4">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">标签编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="editorLabelName">名称：</label>
+                            <input v-model="label.labelName" type="text" class="form-control" id="editorLabelName" name="editorLabelName" placeholder="修改后的标签名称不能为空！" required>
+                        </div>
+                        <div class="form-group" style="text-align: center">
+                            <input class="btn btn-primary" @click="fun10_1_1"  value="保存名称" />
+                            <input class="btn btn-primary" @click="fun10_1_2"  value="删除标签" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 垃圾回收中心编辑对话框-->
+    <div class="modal fade" id="myModal_5">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">垃圾回收中心编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group" style="text-align: center">
+                            <input class="btn btn-primary" @click="fun11_1"  value="永久删除" />
+                            <input class="btn btn-primary" @click="fun11_2"  value="恢复笔记" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 给笔记添加标签的对话框-->
+    <div class="modal fade" id="myModal_6">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">添加标签</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <select class="form-control"  v-model="labelNotebook.lid" name="add-labelToNotebook">
+                            <option v-for="(lb,index) in labels" :value="lb.lid">{{lb.labelName}}</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" @click="fun12_1_1" type="button">添加</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    const router = new VueRouter({
+        routes: [ // 编写路由规则
+            {
+                path:'/',
+                name:'',
+                redirect:'/background'
+            },
+            {
+                path: "/content", // 请求路径，以“/”开头
+                component: contentWrapper // 组件名称
+            },
+            {
+                path:"/background",
+                component: imageBG
+            },
+            {
+                path:"/ebbinghaus",
+                component:ebbinghausWrapper
+            }
+        ]
+    });
+
+    const div_container  = new Vue({
+        el:"#div_container",
+        components:{
+            contentWrapper,
+            imageBG
+        },
+        router, // 引用上面定义的router对象
+        data:{
+            user:{
+                userId:-1,
+                username:"",
+                email:"",
+                gender:"",
+                birthday:"",
+                created:"",
+                categoryId:[],
+                notebookId:[],
+                trashId:[]
+            },
+            newCategoryName:'',
+            categories:[
+                {cid:11,categoryName:'默认笔记本'},
+                {cid:12,categoryName:'数学笔记本'},
+                {cid:13,categoryName:'语文笔记本'},
+                {cid:14,categoryName:'英语笔记本'},
+                {cid:15,categoryName:'生物笔记本'},
+            ],
+            newNotebookName:'',
+            notebooks:[
+                {nid:0,notebookName:'第一章'},
+                {nid:1,notebookName:'第二章'},
+                {nid:2,notebookName:'第三章'},
+                {nid:3,notebookName:'第四章'},
+                {nid:4,notebookName:'第五章'}
+            ],
+            notebook:{
+                notebookId:-1,
+                categoryId:-1,
+                notebookName:'默认笔记',
+                notebookContent:'',
+                trashStatus:false,
+            },
+            newLabelName:'',
+            labels:[
+                {lid:1,labelName:'标签一'},
+                {lid:2,labelName:'标签二'},
+                {lid:3,labelName:'标签三'}
+            ],
+            label:{
+                lid:-1,
+                uid:-1,
+                labelName:'默认标签'
+            },
+            trashStation:[
+                {tsid:-1,uid:-1,nid:-1,notebookName:"已删除的笔记一"},
+            ],
+            trashStationId:-1,
+            labelNotebooks:[
+                {lnid:-1,labelNotebookName:'默认艾宾浩斯笔记'},
+            ],
+            labelNotebook:{lnid:-1,uid:-1,lid:-1,nid:-1,labelNotebookName:'默认艾宾浩斯笔记',labelNotebookContent:''},
+            resultInfo:{
+                flag:true,
+                errorMsg:""
+            },
+            msg:"",
+            show:false,
+            editor1:Object,
+            editor2:Object
+        },
+        watch: {
+            resultInfo: {
+                handler(newResultInfo, oldResultInfo) {
+                    this.msg = newResultInfo.errorMsg;
+                },
+                deep: true
+            }
+        },
+        methods:{
+            //页面刷新
+            fun_reload:function () {
+                location.reload();
+            },
+            //修改昵称
+            fun1:function () {
+                var host = window.location.host;
+                var pathname = window.location.pathname;
+                var paths = pathname.split('/');
+                var newPathname = '';
+                for(var i=0;i<paths.length-1;i++){
+                    if(i===0){
+                        newPathname += ''+paths[i];
+                    }else{
+                        newPathname += '/'+paths[i];
+                    }
+                }
+                window.open('/modifyUsername.html')
+            },
+            //修改密码
+            fun2:function () {
+                var host = window.location.host;
+                var pathname = window.location.pathname;
+                var paths = pathname.split('/');
+                var newPathname = '';
+                for(var i=0;i<paths.length-1;i++){
+                    if(i===0){
+                        newPathname += ''+paths[i];
+                    }else{
+                        newPathname += '/'+paths[i];
+                    }
+                }
+                window.open('/modifyPassword.html')
+            },
+            //注销账户
+            fun3:function () {
+                location.href='/deleteAccount.html';
+            },
+            //退出登录
+            fun4:function () {
+                //alert("fun4")
+                var _this = this;
+                axios.post('/modify/logout.do',
+                    {
+                        email:_this.user.email,
+                    })
+                    .then(function (response) {
+                        _this.resultInfo.flag=response.data.flag;
+                        _this.resultInfo.errorMsg=response.data.errorMsg;
+                        if(_this.resultInfo.flag){
+                            location.href="login.html";
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            },
+            //新建笔记本对话框
+            fun5:function () {
+                $('#myModal_1').modal({
+                    keyboard : true,
+                    show     : true
+                });
+            },
+            //新建笔记本保存
+            fun6:function () {
+                var _this = this;
+                axios.post('/editor/createNewCategory.do',
+                    {
+                        //userId:_this.user.userId,//TODOq 似乎多余了
+                        email:_this.user.email,
+                        newCategoryName:_this.newCategoryName,
+                    })
+                    .then(function (response) {
+                        let list = response.data;
+                        _this.categories = [];
+                        for(i=0; i<list.length;i++){
+                            //TODOq 回显category列表
+                            _this.categories.push({cid:list[i].categoryId,categoryName:list[i].categoryName});
+                        }
+                        _this.categories.forEach((cg,index)=>{
+                            _this.$set(_this.categories, index, {cid:cg.cid,categoryName:cg.categoryName});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭新建笔记本对话框
+                $('#myModal_1').modal('hide');
+            },
+            //新建笔记对话框
+            fun7:function () {
+                $('#myModal_2').modal({
+                    keyboard : true,
+                    show     : true
+                });
+
+            },
+            //新建笔记保存
+            fun8:function () {
+                var _this = this;
+                axios.post('/editor/createNewNotebook.do',
+                    {
+                        categoryId:_this.notebook.categoryId,
+                        newNotebookName:_this.newNotebookName,
+                    })
+                    .then(function (response) {
+                        var list = response.data;
+                        _this.notebooks = [];
+                        for(i=0; i<list.length;i++){
+                            _this.notebooks.push({nid:list[i].notebookId,notebookName:list[i].notebookName});
+                        }
+                        _this.notebooks.forEach((nb,index)=>{
+                            _this.$set(_this.notebooks, index, {nid:nb.nid,notebookName:nb.notebookName});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭新建笔记对话框
+                $('#myModal_2').modal('hide');
+            },
+            //TODOq 删除笔记
+            fun8_1:function () {
+                var _this = this;
+                axios.post('/editor/deleteNotebook.do',
+                    {
+                        categoryId:_this.notebook.categoryId,
+                        notebookId:_this.notebook.notebookId,
+                        userId:_this.user.userId,
+                    })
+                    .then(function (response) {
+                        //TODOq 删除笔记后，修改笔记notebooks，修改艾宾浩斯学习列表，修改垃圾回收中心trashStation
+                        var listA = response.data.notebooks;
+                        _this.notebooks = [];//TODOq 待续
+                        for(i=0; i<listA.length;i++){
+                            _this.notebooks.push({nid:listA[i].notebookId,notebookName:listA[i].notebookName});
+                        }
+                        _this.notebooks.forEach((nb,index)=>{
+                            _this.$set(_this.notebooks, index, {nid:nb.nid,notebookName:nb.notebookName});
+                        });
+                        _this.notebook={notebookId:-1, categoryId:-1, notebookName:'默认笔记', notebookContent:'', trashStatus:false,
+                        };
+                        if(listA.length>0){
+                            _this.notebook.notebookId=_this.notebooks[0].nid;
+                            _this.notebook.categoryId=listA[0].categoryId;
+                            _this.notebook.notebookName=_this.notebooks[0].notebookName;
+                            CKEDITOR.instances.editor1.setData(listA[0].notebookContent);
+                        }else{
+                            CKEDITOR.instances.editor1.setData("");
+                        }
+                        var listB = response.data.trashStation;
+                        _this.trashStation = [];
+                        for(i=0; i<listB.length;i++){
+                            _this.trashStation.push({tsid:listB[i].tsid,uid:listB[i].uid,nid:listB[i].nid,notebookName:listB[i].notebookName});
+                        }
+                        _this.trashStation.forEach((ts,index)=>{
+                            _this.$set(_this.trashStation, index, {tsid:ts.tsid,uid:ts.uid,nid:ts.nid,notebookName:ts.notebookName});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            //TODOq 保存笔记内容
+            fun9:function () {
+                if(!CKEDITOR.instances.editor1){
+                    CKEDITOR.replace('editor1');
+                    div_container.$data.editor1 = CKEDITOR.instances.editor1;
+                }
+                _this=this;
+                axios.post('/editor/saveContent.do',
+                    {
+                        notebookId:_this.notebook.notebookId,
+                        categoryId:_this.notebook.categoryId,
+                        notebookContent:CKEDITOR.instances.editor1.getData(),
+                    })
+                    .then(function (response) {
+                        if (response.data.flag){
+                            alert(response.data.errorMsg)
+                        }else{
+                            alert(response.data.errorMsg)
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            //TODOq 新建艾宾浩斯标签对话框
+            fun10:function () {
+                $('#myModal_3').modal({
+                    keyboard : true,
+                    show     : true
+                });
+            },
+            //TODOq 艾宾浩斯标签编辑对话框
+            fun10_1:function (index) {
+                this.label.lid=this.labels[index].lid;
+                this.label.uid=this.user.userId;
+                this.label.labelName=this.labels[index].labelName;
+                $('#myModal_4').modal({
+                    keyboard : true,
+                    show     : true
+                });
+            },
+            //TODOq 艾宾浩斯标签编辑——保存名称
+            fun10_1_1:function () {
+                var _this = this;
+                axios.post('/editor/updateLabelName.do',
+                    {
+                        lid:_this.label.lid,
+                        uid:_this.label.uid,
+                        labelName:_this.label.labelName,
+                    })
+                    .then(function (response) {
+                        var list = response.data;
+                        _this.labels = [];
+                        for(i=0; i<list.length;i++){
+                            _this.labels.push({lid:list[i].labelId,labelName:list[i].labelName});
+                        }
+                        _this.labels.forEach((lb,index)=>{
+                            _this.$set(_this.labels, index, {lid:lb.lid,labelName:lb.labelName});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭艾宾浩斯标签编辑对话框
+                $('#myModal_4').modal('hide');
+            },
+            //TODOq 艾宾浩斯标签编辑——删除标签
+            fun10_1_2:function () {
+                var _this = this;
+                axios.post('/editor/deleteLabel.do',
+                    {
+                        lid:_this.label.lid,
+                        uid:_this.label.uid,
+                        labelName:_this.label.labelName,
+                    })
+                    .then(function (response) {
+                        var list = response.data;
+                        _this.labels = [];//TODOq 待续
+                        for(i=0; i<list.length;i++){
+                            _this.labels.push({lid:list[i].labelId,labelName:list[i].labelName});
+                        }
+                        _this.labels.forEach((lb,index)=>{
+                            _this.$set(_this.labels, index, {lid:lb.lid,labelName:lb.labelName});
+                        });
+                        if(_this.label.lid==_this.labelNotebook.lid){
+                            _this.labelNotebooks=[];
+                            _this.labelNotebook={lnid:-1,uid:-1,lid:-1,nid:-1,labelNotebookName:'默认艾宾浩斯笔记',labelNotebookContent:''};
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭艾宾浩斯标签编辑对话框
+                $('#myModal_4').modal('hide');
+            },
+            //TODOq 艾宾浩斯标签保存
+            fun10_2:function () {
+                var _this = this;
+                axios.post('/editor/createNewLabel.do',
+                    {
+                        userId:_this.user.userId,
+                        newLabelName:_this.newLabelName,
+                    })
+                    .then(function (response) {
+                        var list = response.data;
+                        _this.labels = [];//TODOq 待续
+                        for(i=0; i<list.length;i++){
+                            _this.labels.push({lid:list[i].labelId,labelName:list[i].labelName});
+                        }
+                        _this.labels.forEach((lb,index)=>{
+                            _this.$set(_this.labels, index, {lid:lb.lid,labelName:lb.labelName});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭新建艾宾浩斯标签对话框
+                $('#myModal_3').modal('hide');
+            },
+            //TODOq 垃圾回收中心对话框
+            fun11:function (index) {
+                this.trashStationId=this.trashStation[index].tsid;
+                $('#myModal_5').modal({
+                    keyboard : true,
+                    show     : true
+                });
+            },
+            //TODO1 垃圾回收中心——永久删除
+            fun11_1:function () {
+                var _this = this;
+                axios.post('/editor/deleteTrashStationById.do',
+                    {
+                        tsid:_this.trashStationId,
+                        userId:_this.user.userId
+                    })
+                    .then(function (response) {
+                        var listB = response.data;
+                        _this.trashStation = [];//TODOq 待续
+                        for(i=0; i<listB.length;i++){
+                            _this.trashStation.push({tsid:listB[i].tsid, uid:listB[i].uid, nid:listB[i].nid, notebookName:listB[i].notebookName});
+                        }
+                        _this.trashStation.forEach((ts,index)=>{
+                            _this.$set(_this.trashStation, index, {tsid:ts.tsid,uid:ts.uid,nid:ts.nid,notebookName:ts.notebookName,});
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭艾宾浩斯标签编辑对话框
+                $('#myModal_5').modal('hide');
+            },
+            //TODO1 垃圾回收中心——恢复笔记
+            fun11_2:function () {
+                var _this = this;
+                axios.post('/editor/retrieveNotebookFromTrashStation.do',
+                    {
+                        tsid:_this.trashStationId,
+                        userId:_this.user.userId,
+                        categoryId:_this.notebook.categoryId
+                    })
+                    .then(function (response) {
+                        var listB = response.data.trashStation;
+                        _this.trashStation = [];
+                        for(i=0; i<listB.length;i++){
+                            _this.trashStation.push({tsid:listB[i].tsid, uid:listB[i].uid, nid:listB[i].nid, notebookName:listB[i].notebookName});
+                        }
+                        _this.trashStation.forEach((ts,index)=>{
+                            _this.$set(_this.trashStation, index, {tsid:ts.tsid,uid:ts.uid,nid:ts.nid,notebookName:ts.notebookName,});
+                        });
+                        if(_this.notebook.categoryId>0){
+                            var listC = response.data.notebooks;
+                            _this.notebooks = [];
+                            for(i=0; i<listC.length;i++){
+                                _this.notebooks.push({nid:listC[i].notebookId, notebookName:listC[i].notebookName});
+                            }
+                            _this.notebooks.forEach((nb,index)=>{
+                                _this.$set(_this.notebooks, index, {nid:nb.nid,notebookName:nb.notebookName,});
+                            });
+                            _this.notebook.notebookId = listC[0].notebookId;
+                            _this.notebook.categoryId = listC[0].categoryId;
+                            _this.notebook.notebookName = listC[0].notebookName;
+                            _this.notebook.notebookContent = listC[0].notebookContent;
+                            _this.notebook.trashStatus = listC[0].trashStatus;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭艾宾浩斯标签编辑对话框
+                $('#myModal_5').modal('hide');
+            },
+            //TODOq 给笔记添加标签的对话框
+            fun12_1:function (index) {
+                $('#myModal_6').modal({
+                    keyboard : true,
+                    show     : true
+                });
+            },
+            //TODOq 给笔记添加标签保存
+            fun12_1_1:function () {
+                var _this = this;
+                axios.post('/editor/addLabelToNotebook.do',
+                    {
+                        uid:_this.user.userId,
+                        lid:_this.labelNotebook.lid,
+                        nid:_this.notebook.notebookId,
+                    })
+                    .then(function (response) {
+                        alert(response.data.errorMsg)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //关闭艾宾浩斯标签编辑对话框
+                $('#myModal_6').modal('hide');
+            },
+            //TODOq 删除笔记的标签
+            fun12_2:function () {
+                if(!CKEDITOR.instances.editor2){
+                    CKEDITOR.replace('editor2');
+                    div_container.$data.editor2 = CKEDITOR.instances.editor2;
+                }
+                var _this = this;
+                axios.post('/editor/deleteLabelNotebook.do',
+                    {
+                        lnid:_this.labelNotebook.lnid,
+                        uid:_this.user.userId,
+                        lid:_this.labelNotebook.lid
+                    })
+                    .then(function (response) {
+                        //TODOq 删除标签笔记后，修改笔记labelNotebooks
+                        var listA = response.data.labelNotebooks;
+                        // console.log("listA============\n"+listA);
+                        _this.labelNotebooks = [];
+                        for(i=0; i<listA.length;i++){
+                            _this.labelNotebooks.push({lnid:listA[i].lnid,labelNotebookName:listA[i].labelNotebookName});
+                        }
+                        _this.labelNotebooks.forEach((ln,index)=>{
+                            _this.$set(_this.labelNotebooks, index, {lnid:ln.lnid,labelNotebookName:ln.labelNotebookName});
+                        });
+                        _this.labelNotebook.lnid=_this.labelNotebooks[0].lnid;
+                        _this.labelNotebook.labelNotebookName=_this.labelNotebooks[0].labelNotebookName;
+                        CKEDITOR.instances.editor2.setData("");
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            //TODOq 艾宾浩斯学习
+            fun13:function (grade) {
+             // Grade: 1   Set reps and interval to 0, keep current EF
+             //       3   Set interval to 0, lower the EF, reps + 1
+             //       5   Reps + 1, interval is calculated using EF, increasing in time.
+                var _this = this;
+                axios.post('/review/ebbinghausReview.do',
+                    {
+                        lnid:_this.labelNotebook.lnid,
+                        uid:_this.labelNotebook.uid,
+                        lid:_this.labelNotebook.lid,
+                        nid:_this.labelNotebook.nid,
+                        grade:grade
+                    })
+                    .then(function (response) {
+                        var list = response.data;
+                        _this.labelNotebooks=[];
+                        for(i=0; i<list.length;i++){
+                            _this.labelNotebooks.push({lnid:list[i].lnid,labelNotebookName:list[i].labelNotebookName});
+                        }
+                        _this.labelNotebooks.forEach((ln,index)=>{
+                            _this.$set(_this.labelNotebooks, index, {lnid:ln.lnid,labelNotebookName:ln.labelNotebookName});
+                        });
+                        if(list.length>0){
+                            _this.labelNotebook.lnid = list[0].lnid;
+                            _this.labelNotebook.uid = list[0].uid;
+                            _this.labelNotebook.lid = list[0].lid;
+                            _this.labelNotebook.nid = list[0].nid;
+                            _this.labelNotebook.labelNotebookName = list[0].labelNotebookName;
+                            _this.labelNotebook.labelNotebookContent = list[0].labelNotebookContent;
+                            CKEDITOR.instances.editor2.setData(list[0].labelNotebookContent)
+                        }else{
+                            CKEDITOR.instances.editor2.setData("");
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        }
+    });
+</script>
+
+<script src="./plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="./plugins/jQueryUI/jquery-ui.min.js"></script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+
+    //$('#markdown-textarea').val('# 是是是试试所所所所所所所所\n### helloworld呃呃呃呃呃呃呃呃呃\n#### 谁说的\n');
+    // function editorA(flag,html) {
+    //     if(flag){
+    //         $('#editor1').val(html);
+    //     }
+    // }
+
+
+</script>
+<script src="./plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="./plugins/raphael/raphael-min.js"></script>
+<script src="./plugins/morris/morris.min.js"></script>
+<script src="./plugins/sparkline/jquery.sparkline.min.js"></script>
+<script src="./plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="./plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script src="./plugins/knob/jquery.knob.js"></script>
+<script src="./plugins/daterangepicker/moment.min.js"></script>
+<script src="./plugins/daterangepicker/daterangepicker.js"></script>
+<script src="./plugins/daterangepicker/daterangepicker.zh-CN.js"></script>
+<script src="./plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="./plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+<script src="./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="./plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="./plugins/fastclick/fastclick.js"></script>
+<script src="./plugins/iCheck/icheck.min.js"></script>
+<script src="./plugins/adminLTE/js/app.min.js"></script>
+<script src="./plugins/treeTable/jquery.treetable.js"></script>
+<script src="./plugins/select2/select2.full.min.js"></script>
+<script src="./plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="./plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js"></script>
+<script src="./plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+<script src="./plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js"></script>
+<script src="./plugins/bootstrap-markdown/js/markdown.js"></script>
+<script src="./plugins/bootstrap-markdown/js/to-markdown.js"></script>
+<script src="./plugins/ckeditor/ckeditor.js"></script>
+<script src="./plugins/input-mask/jquery.inputmask.js"></script>
+<script src="./plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="./plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="./plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="./plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="./plugins/chartjs/Chart.min.js"></script>
+<script src="./plugins/flot/jquery.flot.min.js"></script>
+<script src="./plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="./plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="./plugins/flot/jquery.flot.categories.min.js"></script>
+<script src="./plugins/ionslider/ion.rangeSlider.min.js"></script>
+<script src="./plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script src="./plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="./plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+    $(document).ready(function() {
+        // 选择框
+        $(".select2").select2();
+
+        // WYSIHTML5编辑器
+        $(".textarea").wysihtml5({
+            locale: 'zh-CN'
+        });
+    });
+    // 设置激活菜单
+    function setSidebarActive(tagUri) {
+        var liObj = $("#" + tagUri);
+        if (liObj.length > 0) {
+            liObj.parent().parent().addClass("active");
+            liObj.addClass("active");
+        }
+    }
+</script>
+<script>
+    //日期格式转换函数
+    function dateFormat(longTypeDate){
+        var dateTypeDate = "";
+        var date = new Date();
+        date.setTime(longTypeDate);
+        dateTypeDate += date.getFullYear(); //年
+        dateTypeDate += "-" + getMonth(date); //月
+        dateTypeDate += "-" + getDay(date); //日
+        return dateTypeDate;
+    }
+    //返回 01-12 的月份值
+    function getMonth(date){
+        var month = "";
+        month = date.getMonth() + 1; //getMonth()得到的月份是0-11
+        if(month<10){
+            month = "0" + month;
+        }
+        return month;
+    }
+    //返回01-30的日期
+    function getDay(date){
+        var day = "";
+        day = date.getDate();
+        if(day<10){
+            day = "0" + day;
+        }
+        return day;
+    }
+
+    function fun0() {
+        axios.post('/login/indexHtml.do',
+            {})
+            .then(function (response) {
+                if (!response.data.flag){
+                    confirm(response.data.errorMsg);
+                    location.href='login.html'
+                }
+                div_container.$data.resultInfo.flag=response.data.flag;
+                div_container.$data.resultInfo.errorMsg=response.data.errorMsg;
+                if(div_container.$data.resultInfo.flag){
+                    div_container.$data.user.username=response.data.data.username;
+                    div_container.$data.user.userId=response.data.data.userId;
+                    div_container.$data.user.email=response.data.data.email;
+                    div_container.$data.user.gender=response.data.data.gender;
+                    div_container.$data.user.birthday=dateFormat(response.data.data.birthday);
+                    div_container.$data.user.created=dateFormat(response.data.data.created);
+                    if(div_container.$data.user.gender===1){
+                        div_container.$data.show=true;
+                    }
+                    //TODOq 刷新页面时回显category数据
+                    var list=response.data.data.categories;
+                    div_container.$data.categories = [];
+                    for(i=0; i<list.length;i++){
+                        //TODOq 回显category列表
+                        div_container.$data.categories.push({cid:list[i].categoryId,categoryName:list[i].categoryName});
+                    }
+                    //TODOq 刷新页面时回显艾宾浩斯标签label数据
+                    var listA=response.data.data.labels;
+                    div_container.$data.labels = [];
+                    for(i=0; i<listA.length;i++){
+                        div_container.$data.labels.push({lid:listA[i].labelId,labelName:listA[i].labelName});
+                    }
+                    //TODOq 刷新页面时回显垃圾回收中心trash_station数据
+                    var listB=response.data.data.trashStation;
+                    div_container.$data.trashStation = [];
+                    for(i=0; i<listB.length;i++){
+                        div_container.$data.trashStation.push({tsid:listB[i].tsid, uid:listB[i].uid, nid:listB[i].nid, notebookName:listB[i].notebookName});
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        //TODOa 点击一个category后，回显它下面的notebook
+        if (div_container.$data.notebook.categoryId>-1){
+            axios.post('/editor/findNotebooksByCid.do',
+                {
+                    categoryId:div_container.$data.notebook.categoryId,
+                })
+                .then(function (response) {
+                    var list = response.data;
+                    div_container.$data.notebooks = [];
+                    for(i=0; i<list.length;i++){
+                        div_container.$data.notebooks.push({nid:list[i].notebookId,notebookName:list[i].notebookName});
+                    }
+                    if(list.length>0){
+                        //默认显示第一个笔记的名称
+                        div_container.$data.notebook.notebookId = div_container.$data.notebooks[0].nid;
+                        div_container.$data.notebook.notebookName = div_container.$data.notebooks[0].notebookName;
+                        //TODOq 点开笔记本后，默认回显第一个笔记的内容
+                        axios.post('/editor/findNotebookByNid.do',
+                            {
+                                notebookId:div_container.$data.notebook.notebookId,
+
+                            })
+                            .then(function (response) {
+                                div_container.$data.notebook.notebookContent = response.data.notebookContent;
+                                div_container.$data.notebook.trashStatus = response.data.trashStatus;
+                                //回显笔记内容
+                                CKEDITOR.replace('editor1');
+                                div_container.$data.editor1 = CKEDITOR.instances.editor1;
+                                CKEDITOR.instances.editor1.setData(div_container.$data.notebook.notebookContent);
+                            })
+                            .catch(function (error) {
+                                CKEDITOR.replace('editor1');
+                                div_container.$data.editor1 = CKEDITOR.instances.editor1;
+                                console.log(error);
+                            });
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        //TODO 点击一个label_notebook后，回显它下面的label_notebook
+        if (div_container.$data.labelNotebook.lid>-1){
+            axios.post('/editor/findLabelNotebooksByLidAndUid.do',
+                {
+                    uid:div_container.$data.user.userId,
+                    lid:div_container.$data.labelNotebook.lid,
+                })
+                .then(function (response) {
+                    var list = response.data;
+                    div_container.$data.labelNotebooks = [];
+                    for(i=0; i<list.length;i++){
+                        div_container.$data.labelNotebooks.push({lnid:list[i].lnid,labelNotebookName:list[i].labelNotebookName});
+                    }
+                    if(list.length>0){
+                        //默认显示第一个笔记的名称
+                        //TODOq 点开笔记本后，默认回显第一个笔记的内容
+                        div_container.$data.labelNotebook.lnid = list[0].lnid;
+                        div_container.$data.labelNotebook.uid = list[0].uid;
+                        div_container.$data.labelNotebook.lid = list[0].lid;
+                        div_container.$data.labelNotebook.nid = list[0].nid;
+                        div_container.$data.labelNotebook.labelNotebookName = list[0].labelNotebookName;
+                        div_container.$data.labelNotebook.labelNotebookContent = list[0].labelNotebookContent;
+                        //回显笔记内容
+                        if(!CKEDITOR.instances.editor2){
+                            div_container.$data.editor2 = CKEDITOR.instances.editor2;
+                            CKEDITOR.replace('editor2');
+                        }
+                        CKEDITOR.instances.editor2.setData(div_container.$data.labelNotebook.labelNotebookContent);
+                    }
+                })
+                .catch(function (error) {
+                    if(!CKEDITOR.instances.editor2){
+                        CKEDITOR.replace('editor2');
+                        div_container.$data.editor2 = CKEDITOR.instances.editor2
+                    }
+                    console.log(error);
+                });
+        }
+    }
+</script>
+</html>

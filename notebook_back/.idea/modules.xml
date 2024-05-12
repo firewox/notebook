@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/notebook_back.iml" filepath="$PROJECT_DIR$/notebook_back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notebook_dao/notebook_dao.iml" filepath="$PROJECT_DIR$/notebook_dao/notebook_dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notebook_domain/notebook_domain.iml" filepath="$PROJECT_DIR$/notebook_domain/notebook_domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notebook_service/notebook_service.iml" filepath="$PROJECT_DIR$/notebook_service/notebook_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notebook_utils/notebook_utils.iml" filepath="$PROJECT_DIR$/notebook_utils/notebook_utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notebook_web/notebook_web.iml" filepath="$PROJECT_DIR$/notebook_web/notebook_web.iml" />
+    </modules>
+  </component>
+</project>

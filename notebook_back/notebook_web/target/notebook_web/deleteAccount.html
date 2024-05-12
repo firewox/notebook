@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注销账号</title>
+    +<link href="css/zui.min.css"rel="stylesheet">
+    <link href="lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/zui.min.js"></script>
+    <script src="./js/vuejs-2.5.16.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="lib/datetimepicker/datetimepicker.min.js"></script>
+    <style type="text/css">
+        #head{
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-danger1 {
+            color: #e75033;
+            background-color: #ffe5e0;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="div_register" onclick="fun4_1()">
+    <h3 id="head">注销账号</h3>
+    <form @submit.prevent="fun1">
+        <div class="form-group">
+            <label for="email">邮&nbsp&nbsp&nbsp箱：</label>
+            <input v-model="user.email" type="email" class="form-control" id="email" name="email" placeholder="请输入邮箱" required>
+        </div>
+        <div class="form-group">
+            <label for="password">密&nbsp&nbsp&nbsp码：</label>
+            <input v-model="user.password" type="password" class="form-control " id="password" name="password" placeholder="请输入密码" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmedPassword">确认密码：</label>
+            <input v-model="user.confirmedPassword" type="password" class="form-control"  id="confirmedPassword" name="confirmedPassword" placeholder="请再一次输入密码" required>
+        </div>
+        <div class="form-group">
+            <label for="verificationCode">验证码：</label>
+            <input v-model="user.verificationCode" type="text" class="form-inline" id="verificationCode" name="verificationCode" placeholder="请输入验证码" required>
+            <input @click="fun4" class="btn btn-link" type="button" value="发送邮箱验证码" />
+        </div>
+        <div class="form-group" style="text-align: center">
+            <input class="btn btn-primary" type="submit" value="注销" />
+            <input class="btn btn-default" type="reset" value="重置" />
+            <input @click="fun2" class="btn btn-default" type="button" value="退出" />
+        </div>
+    </form>
+
+    <!-- 对话框HTML -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{msg}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" v-show="!resultInfo.flag" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" v-show="resultInfo.flag" @click="fun2">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    const v = new Vue({
+        el: "#div_register",
+        data: () => ({
+            user: {
+                email: "",
+                password: "",
+                confirmedPassword: "",
+                verificationCode: ""
+            },
+            resultInfo: {
+                flag: false,
+                errorMsg: ""
+            },
+            msg: "",
+            flag:false
+        }),
+        watch: {
+            resultInfo: {
+                handler(newResultInfo, oldResultInfo) {
+                    this.msg = newResultInfo.errorMsg;
+                },
+                deep: true
+            }
+            },
+        methods: {
+            fun1: function () {
+                var _this = this;
+                //
+                if (this.$data.user.password !== this.$data.user.confirmedPassword){
+                    new $.zui.Messager('两次输入的密码不一致', {
+                        icon:'exclamation-sign',
+                        type: 'danger', // 定义颜色主题
+                        close: false // 禁用关闭按钮
+                    }).show();
+                    this.$data.flag=false;
+                }else {
+                    this.$data.flag=true;
+                }
+                //
+                if(_this.$data.flag){
+                    axios.post('/modify/deleteAccount.do',{
+                            email: _this.user.email,
+                            password: _this.user.password,
+                            verificationCode: _this.user.verificationCode,
+                        }
+                        )
+                        .then(function (response) {
+                            _this.resultInfo.flag = response.data.flag;
+                            _this.resultInfo.errorMsg = response.data.errorMsg;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    $('#myModal').modal({
+                        keyboard: false,
+                        show: true
+                    });
+                }
+
+            },
+            fun2: function () {
+                window.close();
+            },
+            fun3: function () {
+                $("#testModal").modal("show");
+            },
+            fun4:function  () {
+                axios.post('/register/checkEmailExist.do',{
+                        email: this.user.email,
+                        deleteAccount:true
+                    }
+                ).then(function (response) {
+                    // console.log("helloWorld==after");
+                        if(response.data.flag===true){
+                            new $.zui.Messager('邮箱验证码5分钟内有效', {
+                                icon:'heart',
+                                type: 'success', // 定义颜色主题
+                                close: false // 禁用关闭按钮
+                            }).show();
+                        }else{
+                            new $.zui.Messager('邮箱已被注册！', {
+                                icon:'exclamation-sign',
+                                type: 'danger', // 定义颜色主题
+                                close: false // 禁用关闭按钮
+                            }).show();
+                        }
+                    }).catch(function (error) {
+                    });
+            }
+        },//mounted
+        mounted: function () {
+        }
+    });
+    function fun4_1() {
+        v.$data.user.birthday = $("#birthday").val();
+    }
+
+</script>
+</html>

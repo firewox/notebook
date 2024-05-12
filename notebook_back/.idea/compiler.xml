@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="notebook_dao" />
+        <module name="notebook_domain" />
+        <module name="notebook_service" />
+        <module name="notebook_utils" />
+        <module name="notebook_web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="notebook_back" target="1.9" />
+      <module name="notebook_dao" target="1.9" />
+      <module name="notebook_domain" target="1.9" />
+      <module name="notebook_service" target="1.9" />
+      <module name="notebook_utils" target="1.9" />
+      <module name="notebook_web" target="1.9" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
